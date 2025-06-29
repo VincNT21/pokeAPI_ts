@@ -1,20 +1,25 @@
 import { createInterface, type Interface } from "readline";
 import { getCommands } from "./commands.js";
+import { PokeAPI } from "./pokeapi.js";
+import { Cache } from "./pokecache.js";
 
 // Create a "registry" of commands.
 export type CLICommand = {
     name: string;
     description: string;
-    callback: (state: State) => void;
+    callback: (state: State) => Promise<void>;
 }
 
 // Create a State type that will store the readline Interface and the commands Record
 export type State = {
     rl: Interface;
     commands: Record<string, CLICommand>;
+    pokeAPI: PokeAPI;
+    nextLocationsURL: string;
+    prevLocationsURL: string;
 }
 
-export function initState(): State {
+export function initState(cacheInterval: number): State {
     // Create an Interface for reading input.
     // https://nodejs.org/api/readline.html#readlinecreateinterfaceoptions
     const rl = createInterface({
@@ -26,5 +31,8 @@ export function initState(): State {
     return {
         rl: rl,
         commands: getCommands(),
+        pokeAPI: new PokeAPI(cacheInterval),
+        nextLocationsURL: "",
+        prevLocationsURL: "",
     };
 }
