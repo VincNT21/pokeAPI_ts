@@ -16,6 +16,7 @@ export function startREPL(state: State) {
 
         // Check if given command is available
         const commandName = words[0];
+        const args = words.slice(1);
 
         const cmd = state.commands[commandName];
 
@@ -26,7 +27,7 @@ export function startREPL(state: State) {
         }
 
         try {
-            await cmd.callback(state);
+            await cmd.callback(state, ...args);
         } catch (err) {
             console.log((err as Error).message);
         }

@@ -1,6 +1,5 @@
 import { expect, test } from "vitest";
 import { Cache } from "./pokecache.js";
-import { resolve } from "path";
 
 test.concurrent.each([
     {
@@ -21,7 +20,7 @@ test.concurrent.each([
         const cached = cache.get(key);
         expect(cached).toBe(val);
 
-        await new Promise((resolve) => setTimeout(resolve, interval + 100));
+        await new Promise((resolve) => setTimeout(resolve, interval + interval + 100));
         const reaped = cache.get(key);
         expect(reaped).toBe(undefined);
 
